@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 //Modelos:
 const Users = require('../models/users');
 
+
 const usersGet =  (req = request, res= response)=> {
 
     const { name = 'No Name', apiKey, page = 1, limit= 5 } = req.query;
@@ -19,17 +20,9 @@ const usersGet =  (req = request, res= response)=> {
 
 const usersPost = async (req = request, res= response)=> {
     
-    const { nombre, email, password, role } = req.body;
+    const { password } = req.body;
 
     try {
-
-        let usuario = await Users.findOne({ email });
-
-        if(usuario) {
-            return res.status(401).json({
-                msg:'Error ya existe usuario con ese Email'
-            });
-        }
 
         usuario = new Users(req.body);
 
@@ -41,9 +34,7 @@ const usersPost = async (req = request, res= response)=> {
 
         return res.status(200).json({
             msg: 'Usuario creado exitosamente',
-            nombre,
-            email,
-            role
+            usuario
         })
         
     } catch (error) {

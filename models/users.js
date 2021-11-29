@@ -24,7 +24,7 @@ const UsersSchema = Schema({
     role: {
         type: String,
         require: true,
-        enum:['ADMIN_ROLE', 'USER_ROLE']
+        enum:['ADMIN_ROLE', 'USER_ROLE', 'VENTAS_ROLE'] //Este campo solo puede tomar estos valores
     },
     estado: {
         type: Boolean,
@@ -35,6 +35,13 @@ const UsersSchema = Schema({
         default: false
     }
 });
+
+
+// Sacar de la respuesta a los campos __v y password:
+UsersSchema.methods.toJSON = function() {
+    const { __v, password, ...user } = this.toObject();
+    return user;
+}
 
 
 module.exports = model('Users', UsersSchema);
