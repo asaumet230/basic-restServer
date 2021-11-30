@@ -7,7 +7,7 @@ const { dbConnection }= require('../dataBase/config');
 
 class Server {
 
-    constructor(){
+    constructor() {
 
         //Start the server with express:
         this.app = express();

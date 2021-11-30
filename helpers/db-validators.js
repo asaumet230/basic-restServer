@@ -11,7 +11,7 @@ const esRolValido = async (role = '') => {
     }                       
 }
 
-const emailExiste =  async(email) => {
+const emailExiste =  async (email) => {
     
     const existeEmail = await Users.findOne({ email });
 
