@@ -7,7 +7,7 @@ const esRolValido = async (role = '') => {
     const existeRole = await Roles.findOne({role});
 
     if(!existeRole) {
-        throw new Error(`El Role: ${role} no es valido`);
+        throw new Error(`El Role: ${role} no es válido`);
     }                       
 }
 
@@ -20,7 +20,18 @@ const emailExiste =  async (email) => {
     }
 }
 
+const existeUsuarioPorID = async (id) => {
+
+    const usuario = await Users.findById({ _id: id });
+
+    if(!usuario) {
+        throw new Error(`Usuario con id: ${ id } no existe`);   
+    }
+    
+}
+
 module.exports = {
     esRolValido,
-    emailExiste
+    emailExiste,
+    existeUsuarioPorID
 }

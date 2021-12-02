@@ -2,18 +2,29 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 const { validacionCampos } = require('../middlewares/validar-campos');
-const { esRolValido, emailExiste } = require('../helpers/db-validators');
+const numberValidator = require('../helpers/number-validator');
+const { esRolValido, 
+        emailExiste,
+        existeUsuarioPorID } = require('../helpers/db-validators');
+
 
 const router = Router();
 
 //Rutas:
-const { usersGet, usersPost, usersPut, usersDelete } = require('../controllers/user');
+const { usersGet, 
+        usersPost, 
+        usersPut, 
+        usersDelete } = require('../controllers/user');
 
 
         //Ejemplos de GET, POST, PUT, DELETE:
 
         /*** GET ***/
-        router.get('/',usersGet );
+        router.get('/',[
+                check('limite').custom( limite => numberValidator( limite )),
+                check('desde').custom( desde => numberValidator( desde )),
+                validacionCampos
+        ], usersGet );
 
          /*** POST ***/
         router.post('/', [
@@ -29,9 +40,22 @@ const { usersGet, usersPost, usersPut, usersDelete } = require('../controllers/u
         ], usersPost);
 
          /*** PUT ***/
-        router.put('/:id', usersPut);
+        router.put('/:id', [
+
+                check('id', 'No es un id Válido').isMongoId(),
+                check('id').custom( id => existeUsuarioPorID(id) ),
+                check('role').custom( role => esRolValido(role) ),
+                validacionCampos
+
+        ], usersPut);
 
         /*** DELETE ***/
-        router.delete('/', usersDelete);    
+        router.delete('/:id', [
+                
+                check('id', 'No es un id Válido').isMongoId(),
+                check('id').custom( id => existeUsuarioPorID(id) ),
+                validacionCampos
+
+        ], usersDelete);    
 
 module.exports = router;
