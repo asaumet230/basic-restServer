@@ -1,21 +1,23 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
+//middlewares:
 const { validacionCampos } = require('../middlewares/validar-campos');
+
+//helpers
 const numberValidator = require('../helpers/number-validator');
 const { esRolValido, 
         emailExiste,
         existeUsuarioPorID } = require('../helpers/db-validators');
 
 
-const router = Router();
-
-//Rutas:
+//controllers:
 const { usersGet, 
         usersPost, 
         usersPut, 
         usersDelete } = require('../controllers/user');
 
+        const router = Router();
 
         //Ejemplos de GET, POST, PUT, DELETE:
 

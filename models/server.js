@@ -17,6 +17,7 @@ class Server {
 
         //End Points or Paths:
         this.userPath = '/api/users';
+        this.authPath = '/api/auth';
 
         //Connect Data Base:
         this.conectarDB();
@@ -46,6 +47,7 @@ class Server {
 
     routes() {
 
+        this.app.use(this.authPath, require('../routes/auth'));
         this.app.use(this.userPath, require('../routes/users') );
 
     }
