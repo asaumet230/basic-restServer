@@ -107,7 +107,16 @@ const usersDelete = async (req = request, res= response) => {
          * en la APP es decir los cambios que ha hecho en la base de datos.
         ***/
 
-        const usuario = await Users.findByIdAndUpdate(id, { estado: false }, { new: true });
+        let usuario = await Users.findById({ _id: id });
+        
+        if(!usuario.estado) {
+            return res.status(400).json({
+                msg: 'Usuario no existe en la DB',
+            });
+        }
+
+        usuario = await Users.findByIdAndUpdate(id, { estado: false }, { new: true });
+        
 
         return res.status(200).json({
             msg: 'Usuario eliminado exitosamente',
