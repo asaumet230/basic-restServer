@@ -7,6 +7,7 @@ const Users = require('../models/users');
 
 //Helpers:
 const generarJWT = require('../helpers/generar-jwt');
+const googleVerify = require('../helpers/google-verify');
 
 
 const login = async (req = request, res = response) => {
@@ -53,9 +54,68 @@ const login = async (req = request, res = response) => {
         });
     }
 
+}
+
+const googleSignIn = async (req = request, res = response) => {
+
+    const { id_token } = req.body;
+
+    try {
+
+        const { email, img, nombre } = await googleVerify(id_token);
+
+        let usuario = await Users.findOne({ email });
+
+        if( !usuario ) {
+
+            usuario = new Users({
+                nombre,
+                email,
+                img,
+                password: '@@@@@@',
+                google: true
+            });
+
+           
+        } else {
+            usuario.google = true;
+        }
+
+        // Guardamos el usuario:
+        await usuario.save();
+
+
+        // Si el usuario aunque sea de google ha sido eliminado no se puede permitir el registro nuevamente:
+        if( !usuario.estado ) {
+
+            return res.status(401).json({
+                msg: 'Hable con el administrador, usuario bloqueado'
+            });
+
+        }
+
+        //Generamos el JWT:
+        const token = await generarJWT(usuario._id);
+
+
+        return res.status(200).json({
+            msg: 'Login con google OK',
+            email,
+            nombre,
+            img,
+            token
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Error comuniquese con el administrador'
+        });
+    }
 
 }
 
 module.exports = {
-    login
+    login,
+    googleSignIn
 }

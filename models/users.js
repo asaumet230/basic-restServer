@@ -24,7 +24,8 @@ const UsersSchema = Schema({
     role: {
         type: String,
         require: true,
-        enum:['ADMIN_ROLE', 'USER_ROLE', 'VENTAS_ROLE'] //Este campo solo puede tomar estos valores
+        enum:['ADMIN_ROLE', 'USER_ROLE', 'VENTAS_ROLE'], //Este campo solo puede tomar estos valores
+        default: 'USER_ROLE'
     },
     estado: {
         type: Boolean,
