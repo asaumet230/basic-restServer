@@ -3,7 +3,7 @@ const { response, request } = require('express');
 const bcrypt = require('bcrypt');
 
 //Modelos:
-const Users = require('../models/users');
+const { Users } = require('../models/index');
 
 
 const usersGet =  async (req = request, res= response)=> {

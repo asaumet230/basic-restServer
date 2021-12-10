@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 //Models:
-const Users = require('../models/users');
+const { Users } = require('../models/index');
 
 //Helpers:
 const generarJWT = require('../helpers/generar-jwt');
