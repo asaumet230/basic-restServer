@@ -44,14 +44,6 @@ const obtenerCategoria = async ( req = request, res = response ) => {
 
         const categoriaDB = await Categoria.findById({ _id:id }).populate('usuario', 'nombre email img');
 
-        if( !categoriaDB.estado ) {
-
-            return res.status(400).json({
-            msg:'La categoría no existe',
-        });
-
-        }
-
         return res.status(200).json({
             msg:'Consulta realizada con exíto',
             categoriaDB
@@ -143,16 +135,7 @@ const borrarCategoria = async (req = request, res = response) => {
 
     try {
         
-        let categoriaDB = await Categoria.findById({ _id: id });
-
-        if( !categoriaDB.estado ) {
-
-            return res.status(400).json({
-                msg: 'La categoría no existe'
-            });
-        }
-
-       categoriaDB = await Categoria.findByIdAndUpdate({ _id: id }, { estado: false }, { new: true });
+       const categoriaDB = await Categoria.findByIdAndUpdate({ _id: id }, { estado: false }, { new: true });
 
        return res.status(200).json({
            msg:`Categoría elminada exitosamente ${ categoriaDB.nombre }` 

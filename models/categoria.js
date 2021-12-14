@@ -23,7 +23,7 @@ const CategoriaSchema = Schema({
 //Retirar de la respuesta el campo __v:
 CategoriaSchema.methods.toJSON = function() {
 
-    const {__v, _id, estado, ...categoria } = this.toObject();
+    const { __v, _id, estado, ...categoria } = this.toObject();
     categoria.cid = _id;
     return categoria; 
 }

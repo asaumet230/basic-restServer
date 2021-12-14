@@ -10,25 +10,24 @@ const ProductoSchema = Schema({
     },
     referencia: {
         type: String,
+        unique: true,
         lowercase: true,
         require: [ true, 'La referencia es obligatoria']
     },
     precio: {
         type: Number,
-        require: [ true, 'El precio es obligatorio' ]
+        default: 0
     },
     cantidad: {
         type: Number,
-        require: [ true, 'La cantidad es obligatorio' ]
+        default: 0
     },
     marca: {
         type: String,
-        require: [ true, 'La marca es obligatorio' ],
         lowercase: true
     },
     descripcion: {
         type: String,
-        require: [ true, 'La descipción es obligatorio' ],
         lowercase: true
     },
     img: {
@@ -50,6 +49,16 @@ const ProductoSchema = Schema({
     }
 });
 
+//Retirar y anexar los campos deseados:
+ProductoSchema.methods.toJSON = function () {
 
+    const { __v, _id, usuario, ...producto } = this.toObject();
+
+    producto.pid = _id;
+    const { nombre, email } = usuario;
+    producto.usuario = { nombre, email };
+
+    return producto;
+}
 
 module.exports = model('Producto', ProductoSchema);
