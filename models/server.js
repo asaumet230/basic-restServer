@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 //dataBase Connection:
 const { dbConnection }= require('../dataBase/config');
@@ -21,7 +22,8 @@ class Server {
             auth:       '/api/auth',
             categorias: '/api/categorias',
             productos:  '/api/productos',
-            buscar:     '/api/buscar'
+            buscar:     '/api/buscar',
+            uploads:    '/api/uploads'
         }
         
 
@@ -49,6 +51,13 @@ class Server {
 
         //Directorio publico donde se guardan los archivos:
         this.app.use(express.static('public'));
+
+        //File Uploads - carga de archivo:
+        this.app.use( fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true // Esta opción permite que la carpeta donde se guardan las imagenes se cree sin haberla creado nosotros.
+        }));
     }
 
     routes() {
@@ -58,6 +67,7 @@ class Server {
         this.app.use(this.paths.categorias, require('../routes/categorias'));
         this.app.use(this.paths.productos, require('../routes/productos'));
         this.app.use(this.paths.buscar, require('../routes/buscar'));
+        this.app.use(this.paths.uploads, require('../routes/uploads'));
 
     }
 
