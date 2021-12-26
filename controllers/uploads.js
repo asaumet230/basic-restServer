@@ -124,7 +124,7 @@ const actualizarImagenCloudinary = async ( req = request, res = response ) => {
         
         if( !modelo || !modelo.estado ) {
           return res.status(400).json({
-            msg: `El usuario con Id; ${ id } no existe`
+            msg: `El usuario con Id; ${ id } no existe - users`
           });
         }
 
@@ -132,13 +132,14 @@ const actualizarImagenCloudinary = async ( req = request, res = response ) => {
       
       case 'productos':
         
-        modelo = await Users.findById(id);
+        modelo = await Producto.findById(id).populate('usuario', 'nombre email');
         
         if( !modelo || !modelo.estado ) {
           return res.status(400).json({
-            msg: `El producto con Id; ${ id } no existe`
+            msg: `El producto con Id; ${ id } no existe - productos`
           });
-        }    
+        }
+        
       
       break;
 
@@ -231,7 +232,7 @@ const mostrarImagen = async ( req = request, res = response ) => {
     } else {
 
       const imagenDefecto = path.join(__dirname, '../assets/no-image.jpg');
-      return res.sendFile(imagenDefecto)
+      return res.sendFile(imagenDefecto);
     }
   
     
